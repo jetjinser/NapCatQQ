@@ -1,11 +1,11 @@
 import { napCatCore } from '@/core';
-import { program } from 'commander';
+import { program, Option } from 'commander';
 import qrcode from 'qrcode-terminal';
 import fs from 'fs/promises';
 import fsSync from 'fs';
 import path from 'node:path';
 import { checkVersion } from '@/common/utils/version';
-import { log, logDebug, logError, LogLevel, logWarn, setLogLevel } from '@/common/utils/log';
+import { enableConsoleLog, enableFileLog, log, logDebug, logError, LogLevel, logWarn, setLogLevel } from '@/common/utils/log';
 import { NapCatOnebot11 } from '@/onebot11/main';
 import { InitWebUi } from './webui/index';
 import { WebUiDataRuntime } from './webui/src/helper/Data';
@@ -20,13 +20,31 @@ const __dirname = dirname(__filename);
 const tagColor = chalk.cyan;
 program
   .option('-q, --qq <type>', 'QQ号')
+  .addOption(
+    new Option('-l, --log-sink [target...]', 'log 输出目标')
+      .choices(['file', 'console'])
+      .default(['file', 'console'], '同时输出到文件和控制台')
+  )
   .parse(process.argv);
+
+const cmdOptions = program.opts();
+console.log(cmdOptions);
+
+enableFileLog(false);
+enableConsoleLog(false);
+for (const target of cmdOptions.target) {
+  if (target == 'file') {
+    enableFileLog(true);
+  }
+  if (target == 'console') {
+    enableConsoleLog(true);
+  }
+}
 
 //deleteOldFiles(path.join(__dirname, 'logs'), 3).then().catch();
 // UpdateConfig().catch(logError); 移除支持
 // 启动WebUi
 InitWebUi();
-const cmdOptions = program.opts();
 // console.log(process.argv);
 checkVersion().then(async (remoteVersion: string) => {
   const localVersion = JSON.parse(fsSync.readFileSync(path.join(__dirname, 'package.json')).toString()).version;
