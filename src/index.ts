@@ -28,10 +28,7 @@ program
   .parse(process.argv);
 
 const cmdOptions = program.opts();
-console.log(cmdOptions);
 
-enableFileLog(false);
-enableConsoleLog(false);
 for (const target of cmdOptions.target) {
   if (target == 'file') {
     enableFileLog(true);

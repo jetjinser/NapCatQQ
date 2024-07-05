@@ -1,13 +1,7 @@
 import log4js, { Configuration } from 'log4js';
 import { truncateString } from '@/common/utils/helper';
-import path from 'node:path';
 import { SelfInfo } from '@/core';
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import chalk from 'chalk';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 export enum LogLevel {
   DEBUG = 'debug',
@@ -17,28 +11,11 @@ export enum LogLevel {
   FATAL = 'fatal',
 }
 
-const logDir = path.join(path.resolve(__dirname), 'logs');
-
-function getFormattedTimestamp() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = (now.getMonth() + 1).toString().padStart(2, '0');
-  const day = now.getDate().toString().padStart(2, '0');
-  const hours = now.getHours().toString().padStart(2, '0');
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  const seconds = now.getSeconds().toString().padStart(2, '0');
-  const milliseconds = now.getMilliseconds().toString().padStart(3, '0');
-  return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}.${milliseconds}`;
-}
-
-const filename = `${getFormattedTimestamp()}.log`;
-const logPath = path.join(logDir, filename);
-
 const logConfig: Configuration = {
   appenders: {
     FileAppender: { // 输出到文件的appender
       type: 'file',
-      filename: logPath, // 指定日志文件的位置和文件名
+      filename: '/dev/null', // 指定日志文件的位置和文件名
       maxLogSize: 10485760, // 日志文件的最大大小（单位：字节），这里设置为10MB
       layout: {
         type: 'pattern',
@@ -79,8 +56,8 @@ export function setLogSelfInfo(selfInfo: SelfInfo) {
 }
 setLogSelfInfo({ nick: '', uin: '', uid: '' });
 
-let fileLogEnabled = true;
-let consoleLogEnabled = true;
+let fileLogEnabled = false;
+let consoleLogEnabled = false;
 export function enableFileLog(enable: boolean) {
   fileLogEnabled = enable;
 }
