@@ -19,10 +19,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
-    "@babel/preset-typescript": "^7.24.7",
-    "vite-plugin-babel": "^1.2.0",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-decorators": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
     "@log4js-node/log4js-api": "^1.0.2",
     "@protobuf-ts/plugin": "^2.9.4",
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -47,6 +46,7 @@
     "rollup-plugin-obfuscator": "^1.1.0",
     "typescript": "^5.3.3",
     "vite": "^5.2.6",
+    "vite-plugin-babel": "^1.2.0",
     "vite-plugin-cp": "^4.0.8",
     "vite-plugin-dts": "^3.8.2",
     "vite-tsconfig-paths": "^4.3.2"
@@ -66,6 +66,7 @@
     "qrcode-terminal": "^0.12.0",
     "silk-wasm": "^3.3.4",
     "sqlite3": "^5.1.7",
+    "tempy": "^3.1.0",
     "uuid": "^10.0.0",
     "ws": "^8.16.0"
   }

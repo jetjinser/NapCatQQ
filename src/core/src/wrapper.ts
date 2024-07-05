@@ -29,8 +29,8 @@ import {
 import { qqVersionConfigInfo } from '@/common/utils/QQBasicInfo';
 import { NodeIKernelStorageCleanService } from './services/NodeIKernelStorageCleanService';
 import { NodeIKernelRobotService } from './services/NodeIKernelRobotService';
-import { dirname } from "node:path"
-import { fileURLToPath } from "node:url"
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { NodeIKernelNodeMiscService } from './services/NodeIKernelNodeMiscService';
 import { NodeIKernelUixConvertService } from './services/NodeIKernelUixConvertService';
 import { NodeIKernelMsgBackupService } from './services/NodeIKernelMsgBackupService';
@@ -39,6 +39,7 @@ import { NodeIKernelTianShuService } from './services/NodeIKernelTianShuService'
 import { NodeIKernelUnitedConfigService } from './services/NodeIKernelUnitedConfigService';
 import { NodeIKernelSearchService } from './services/NodeIKernelSearchService';
 import { NodeIKernelCollectionService } from './services/NodeIKernelCollectionService';
+import { temporaryFile } from 'tempy';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -171,7 +172,7 @@ export interface NodeIQQNTWrapperSession {
   getTicketService(): NodeIKernelTicketService;
 
   getTipOffService(): NodeIKernelTipOffService;
-  
+
   getNodeMiscService(): NodeIKernelNodeMiscService;
 
   getRichMediaService(): NodeIKernelRichMediaService;
@@ -286,11 +287,11 @@ let wrapperNodePath = path.resolve(path.dirname(process.execPath), './resources/
 if (!fs.existsSync(wrapperNodePath)) {
   wrapperNodePath = path.join(path.dirname(process.execPath), `resources/app/versions/${qqVersionConfigInfo.curVersion}/wrapper.node`);
 }
-let WrapperLoader = path.join(__dirname, "WrapperLoader.cjs");
+const WrapperLoader = temporaryFile({ name: 'WrapperLoader.cjs' });
 //此处待优化
 fs.writeFileSync(WrapperLoader, `
-module.exports = require("${wrapperNodePath.replace(/\\/g, "\\\\")}");
+module.exports = require("${wrapperNodePath.replace(/\\/g, '\\\\')}");
 exports = module.exports;
-`)
-const QQWrapper: WrapperNodeApi = (await import("file://" + WrapperLoader)).default;
+`);
+const QQWrapper: WrapperNodeApi = (await import('file://' + WrapperLoader)).default;
 export default QQWrapper;
